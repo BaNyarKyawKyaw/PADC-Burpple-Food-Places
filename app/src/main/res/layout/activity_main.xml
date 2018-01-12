@@ -8,19 +8,20 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="256dp"
-            app:contentScrim="?attr/colorPrimary"
+            android:layout_height="300dp"
+            app:contentScrim="@color/primary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/vp_high_light_images"
                 android:layout_width="match_parent"
-                android:layout_height="256dp"
+                android:layout_height="match_parent"
                 android:fitsSystemWindows="true" />
 
             <com.bnkk.padcburpplefoodplaces.components.PageIndicatorView
@@ -30,11 +31,36 @@
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="@dimen/margin_medium_2" />
 
+            <TextView
+                android:id="@+id/lbl_burpple"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_xxlarge"
+                android:text="@string/burpple"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_heading_1x"
+                android:textStyle="bold" />
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin" />
+                android:layout_height="70dp"
+                android:layout_gravity="center_vertical"
+                app:layout_collapseMode="pin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="@dimen/margin_medium_2"
+                    android:layout_marginRight="@dimen/margin_medium_2"
+                    android:background="@drawable/bg_search_box"
+                    android:drawableLeft="@drawable/ic_search_24dp"
+                    android:drawableTint="@color/secondary_text"
+                    android:gravity="center_vertical"
+                    android:text="@string/search_hint"
+                    android:textSize="@dimen/text_regular_2x" />
+            </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -68,6 +94,17 @@
                 android:layout_marginLeft="@dimen/margin_medium_2"
                 android:text="@string/promotion" />
 
+            <TextView
+                android:id="@+id/btn_see_more_promotions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/lbl_promotions"
+                android:layout_alignParentRight="true"
+                android:padding="@dimen/text_regular_2x"
+                android:text="@string/see_more"
+                android:textColor="@color/primary"
+                android:textSize="@dimen/text_regular_2x" />
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_promotions"
                 android:layout_width="wrap_content"
@@ -94,6 +131,17 @@
                 android:layout_below="@id/lbl_burpple_guides_latest"
                 android:layout_marginLeft="@dimen/margin_medium_2"
                 android:text="@string/burpple_guides" />
+
+            <TextView
+                android:id="@+id/btn_see_more_burpple_guides"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/lbl_burpple_guides"
+                android:layout_alignParentRight="true"
+                android:padding="@dimen/text_regular_2x"
+                android:text="@string/see_more"
+                android:textColor="@color/primary"
+                android:textSize="@dimen/text_regular_2x" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_burpple_guides"
@@ -122,19 +170,35 @@
                 android:layout_marginLeft="@dimen/margin_medium_2"
                 android:text="@string/new_trending" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_new_trending"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/ll_new_and_trending"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lbl_new_trending"
-                android:layout_marginBottom="@dimen/margin_medium_2"
-                android:layout_marginTop="@dimen/margin_medium_2" />
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <include
+                    android:id="@+id/vp_empty_news"
+                    layout="@layout/view_pod_new_trending"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <include
+                    android:id="@+id/vp_empty_news"
+                    layout="@layout/view_pod_new_trending"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/iv_divider_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/rv_new_trending"
+                android:layout_below="@id/ll_new_and_trending"
                 android:src="@drawable/divider_margin_horizontal_line" />
 
             <TextView
