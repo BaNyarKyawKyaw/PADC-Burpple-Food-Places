@@ -7,10 +7,19 @@ import android.support.v7.widget.RecyclerView;
 
 import com.bnkk.padcburpplefoodplaces.R;
 import com.bnkk.padcburpplefoodplaces.adapters.BurppleGuidesAdapter;
-import com.bnkk.padcburpplefoodplaces.adapters.HighLightImagesPagerAdapter;
+import com.bnkk.padcburpplefoodplaces.adapters.FeaturedImagesPagerAdapter;
 import com.bnkk.padcburpplefoodplaces.adapters.PromotionsAdapter;
 import com.bnkk.padcburpplefoodplaces.components.PageIndicatorView;
+import com.bnkk.padcburpplefoodplaces.components.SmartScrollListener;
+import com.bnkk.padcburpplefoodplaces.data.models.BurppleModel;
+import com.bnkk.padcburpplefoodplaces.data.vos.FeaturedVO;
+import com.bnkk.padcburpplefoodplaces.events.RestApiEvent;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -31,18 +40,22 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.rv_burpple_guides)
     RecyclerView rvBurppleGuides;
 
+    private FeaturedImagesPagerAdapter mFeaturedImagesPagerAdapter;
+    private PromotionsAdapter mPromotionsAdapter;
+    private BurppleGuidesAdapter mBurppleGuidesAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this, this);
 
-        final HighLightImagesPagerAdapter mHighLightImagesPagerAdapter = new HighLightImagesPagerAdapter(getApplicationContext());
-        vpHighLightImages.setAdapter(mHighLightImagesPagerAdapter);
+        mFeaturedImagesPagerAdapter = new FeaturedImagesPagerAdapter(getApplicationContext());
+        vpHighLightImages.setAdapter(mFeaturedImagesPagerAdapter);
 
-        vpHighLightImages.setOffscreenPageLimit(mHighLightImagesPagerAdapter.getCount());
+        vpHighLightImages.setOffscreenPageLimit(mFeaturedImagesPagerAdapter.getCount());
 
-        pivHighLightImages.setNumPage(mHighLightImagesPagerAdapter.getCount());
+        pivHighLightImages.setNumPage(mFeaturedImagesPagerAdapter.getCount());
         vpHighLightImages.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -62,7 +75,7 @@ public class MainActivity extends BaseActivity {
 
         Timer swipeTimer = new Timer();
         swipeTimer.schedule(new TimerTask() {
-            int NUM_PAGES = mHighLightImagesPagerAdapter.getCount();
+            int NUM_PAGES = mFeaturedImagesPagerAdapter.getCount();
             int currentPage = 0;
 
             @Override
@@ -79,13 +92,33 @@ public class MainActivity extends BaseActivity {
             }
         }, 1500, 5000);
 
-        rvPromotions.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
-        PromotionsAdapter mPromotionsAdapter = new PromotionsAdapter(getApplicationContext());
+        rvPromotions.setLayoutManager(new LinearLayoutManager(getApplicationContext(),
+                LinearLayoutManager.HORIZONTAL, false));
+        mPromotionsAdapter = new PromotionsAdapter(getApplicationContext());
         rvPromotions.setAdapter(mPromotionsAdapter);
 
-        rvBurppleGuides.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
-        BurppleGuidesAdapter mBurppleGuidesAdapter = new BurppleGuidesAdapter(getApplicationContext());
+        SmartScrollListener mPromotionsSmartScrollListener = new SmartScrollListener(
+                new SmartScrollListener.OnSmartScrollListener() {
+                    @Override
+                    public void onListEndReach() {
+                        BurppleModel.getObjInstance().loadMorePromotions();
+                    }
+                });
+        rvPromotions.addOnScrollListener(mPromotionsSmartScrollListener);
+
+        rvBurppleGuides.setLayoutManager(new LinearLayoutManager(getApplicationContext(),
+                LinearLayoutManager.HORIZONTAL, false));
+        mBurppleGuidesAdapter = new BurppleGuidesAdapter(getApplicationContext());
         rvBurppleGuides.setAdapter(mBurppleGuidesAdapter);
+
+        SmartScrollListener mGuidesSmartScrollListener = new SmartScrollListener(
+                new SmartScrollListener.OnSmartScrollListener() {
+                    @Override
+                    public void onListEndReach() {
+                        BurppleModel.getObjInstance().loadMoreGuides();
+                    }
+                });
+        rvBurppleGuides.addOnScrollListener(mGuidesSmartScrollListener);
 
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -97,5 +130,40 @@ public class MainActivity extends BaseActivity {
             }
         });
         */
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onFeaturedLoaded(RestApiEvent.FeaturedLoadedEvent event) {
+        bindData(event.getLoadFeatured());
+    }
+
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onPromotionsLoaded(RestApiEvent.PromotionsLoadedEvent event) {
+        mPromotionsAdapter.appendNewData(event.getLoadPromotions());
+    }
+
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onGuidesLoaded(RestApiEvent.GuidesLoadedEvent event) {
+        mBurppleGuidesAdapter.appendNewData(event.getLoadGuides());
+    }
+
+    public void bindData(List<FeaturedVO> data) {
+        mFeaturedImagesPagerAdapter.setFeatured(data);
     }
 }

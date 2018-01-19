@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_explore"
+        android:enabled="true"
+        android:icon="@drawable/ic_explore_24dp"
+        android:orderInCategory="100"
+        android:title="@string/explore"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_all_guides"
+        android:enabled="true"
+        android:icon="@drawable/ic_import_contacts_24dp"
+        android:orderInCategory="100"
+        android:title="@string/all_guides"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_add"
+        android:enabled="true"
+        android:icon="@drawable/ic_add_box_24dp"
+        android:orderInCategory="100"
+        android:title=""
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_activity"
+        android:enabled="true"
+        android:icon="@drawable/ic_inbox_24dp"
+        android:orderInCategory="100"
+        android:title="@string/explore"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_profile"
+        android:enabled="true"
+        android:icon="@drawable/ic_person_24dp"
+        android:orderInCategory="100"
+        android:title="@string/all_guides"
+        app:showAsAction="always" />
+</menu>

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bnkk.padcburpplefoodplaces">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".BfpApp"
         android:allowBackup="true"

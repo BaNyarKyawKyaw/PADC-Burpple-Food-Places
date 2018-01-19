@@ -7,23 +7,30 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bnkk.padcburpplefoodplaces.R;
+import com.bnkk.padcburpplefoodplaces.data.vos.FeaturedVO;
+import com.bnkk.padcburpplefoodplaces.viewItems.FeaturedImagesViewItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by E5-575G on 1/5/2018.
  */
 
-public class HighLightImagesPagerAdapter extends PagerAdapter {
+public class FeaturedImagesPagerAdapter extends PagerAdapter {
 
     private LayoutInflater mLayoutInflater;
+    private List<FeaturedVO> mFeatured;
 
-    public HighLightImagesPagerAdapter(Context context) {
+    public FeaturedImagesPagerAdapter(Context context) {
         super();
         mLayoutInflater = LayoutInflater.from(context);
+        mFeatured = new ArrayList<>();
     }
 
     @Override
     public int getCount() {
-        return 5;
+        return mFeatured.size();
     }
 
     @Override
@@ -33,7 +40,12 @@ public class HighLightImagesPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        View itemView = mLayoutInflater.inflate(R.layout.view_item_high_light_image, container, false);
+
+        FeaturedImagesViewItem itemView = (FeaturedImagesViewItem) mLayoutInflater.inflate(R.layout.view_item_featured_image, container, false);
+
+        if (mFeatured.get(position).getBurppleFeaturedImage() != null) {
+            itemView.setData(mFeatured.get(position).getBurppleFeaturedImage());
+        }
         container.addView(itemView);
 
         return itemView;
@@ -42,5 +54,10 @@ public class HighLightImagesPagerAdapter extends PagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
+    }
+
+    public void setFeatured(List<FeaturedVO> featured) {
+        mFeatured = featured;
+        notifyDataSetChanged();
     }
 }

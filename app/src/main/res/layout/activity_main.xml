@@ -66,189 +66,204 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <RelativeLayout
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large">
+
+                <TextView
+                    android:id="@+id/lbl_promotion_featured"
+                    style="@style/CategoryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_medium_2_n"
+                    android:layout_marginLeft="@dimen/margin_medium_2"
+                    android:text="@string/featured" />
+
+                <TextView
+                    android:id="@+id/lbl_promotions"
+                    style="@style/CategoryTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_below="@id/lbl_promotion_featured"
+                    android:layout_marginLeft="@dimen/margin_medium_2"
+                    android:text="@string/promotion" />
+
+                <TextView
+                    android:id="@+id/btn_see_more_promotions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/lbl_promotions"
+                    android:layout_alignParentRight="true"
+                    android:padding="@dimen/text_regular_2x"
+                    android:text="@string/see_more"
+                    android:textColor="@color/primary"
+                    android:textSize="@dimen/text_regular_2x" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_promotions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lbl_promotions"
+                    android:layout_marginTop="@dimen/margin_medium_2" />
+
+                <TextView
+                    android:id="@+id/lbl_burpple_guides_latest"
+                    style="@style/CategoryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/rv_promotions"
+                    android:layout_marginBottom="@dimen/margin_medium_2_n"
+                    android:layout_marginLeft="@dimen/margin_medium_2"
+                    android:layout_marginTop="@dimen/margin_xlarge"
+                    android:text="@string/latest" />
+
+                <TextView
+                    android:id="@+id/lbl_burpple_guides"
+                    style="@style/CategoryTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_below="@id/lbl_burpple_guides_latest"
+                    android:layout_marginLeft="@dimen/margin_medium_2"
+                    android:text="@string/burpple_guides" />
+
+                <TextView
+                    android:id="@+id/btn_see_more_burpple_guides"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/lbl_burpple_guides"
+                    android:layout_alignParentRight="true"
+                    android:padding="@dimen/text_regular_2x"
+                    android:text="@string/see_more"
+                    android:textColor="@color/primary"
+                    android:textSize="@dimen/text_regular_2x" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_burpple_guides"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lbl_burpple_guides"
+                    android:layout_marginTop="@dimen/margin_medium_2" />
+
+                <TextView
+                    android:id="@+id/lbl_new_trending_latest"
+                    style="@style/CategoryText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/rv_burpple_guides"
+                    android:layout_marginBottom="@dimen/margin_medium_2_n"
+                    android:layout_marginLeft="@dimen/margin_medium_2"
+                    android:layout_marginTop="@dimen/margin_xlarge"
+                    android:text="@string/latest" />
+
+                <TextView
+                    android:id="@+id/lbl_new_trending"
+                    style="@style/CategoryTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_below="@id/lbl_new_trending_latest"
+                    android:layout_marginLeft="@dimen/margin_medium_2"
+                    android:text="@string/new_trending" />
+
+                <LinearLayout
+                    android:id="@+id/ll_new_and_trending"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lbl_new_trending"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <include
+                        android:id="@+id/vp_empty_news"
+                        layout="@layout/view_pod_new_trending"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <include
+                        android:id="@+id/vp_empty_news"
+                        layout="@layout/view_pod_new_trending"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/iv_divider_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ll_new_and_trending"
+                    android:src="@drawable/divider_horizontal_line" />
+
+                <TextView
+                    android:id="@+id/btn_explore_neighbourhoods"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/iv_divider_1"
+                    android:layout_marginBottom="@dimen/margin_medium_2"
+                    android:layout_marginLeft="@dimen/margin_medium_2"
+                    android:layout_marginTop="@dimen/margin_medium_2"
+                    android:drawableLeft="@drawable/ic_location_on_24dp"
+                    android:drawablePadding="@dimen/margin_medium_2"
+                    android:drawableTint="@color/secondary_text"
+                    android:text="@string/explore_neighbourhoods"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="@dimen/text_regular_3x" />
+
+                <ImageView
+                    android:id="@+id/iv_divider_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btn_explore_neighbourhoods"
+                    android:src="@drawable/divider_horizontal_line" />
+
+                <TextView
+                    android:id="@+id/btn_explore_categories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/iv_divider_2"
+                    android:layout_marginBottom="@dimen/margin_medium_2"
+                    android:layout_marginLeft="@dimen/margin_medium_2"
+                    android:layout_marginTop="@dimen/margin_medium_2"
+                    android:drawableLeft="@drawable/ic_restaurant_24dp"
+                    android:drawablePadding="@dimen/margin_medium_2"
+                    android:drawableTint="@color/secondary_text"
+                    android:text="@string/explore_categories"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="@dimen/text_regular_3x" />
+
+                <ImageView
+                    android:id="@+id/iv_divider_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/btn_explore_categories"
+                    android:layout_marginBottom="@dimen/margin_xxlarge"
+                    android:src="@drawable/divider_horizontal_line" />
+
+            </RelativeLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+        <android.support.design.widget.BottomNavigationView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_large">
+            android:layout_alignParentBottom="true"
+            app:itemBackground="@color/white"
+            app:itemIconTint="@drawable/state_button_navigation_item"
+            app:itemTextColor="@drawable/state_button_navigation_item"
+            app:menu="@menu/bottom_navigation_main" />
 
-            <TextView
-                android:id="@+id/lbl_promotion_featured"
-                style="@style/CategoryText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_medium_2_n"
-                android:layout_marginLeft="@dimen/margin_medium_2"
-                android:text="@string/featured" />
-
-            <TextView
-                android:id="@+id/lbl_promotions"
-                style="@style/CategoryTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_below="@id/lbl_promotion_featured"
-                android:layout_marginLeft="@dimen/margin_medium_2"
-                android:text="@string/promotion" />
-
-            <TextView
-                android:id="@+id/btn_see_more_promotions"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/lbl_promotions"
-                android:layout_alignParentRight="true"
-                android:padding="@dimen/text_regular_2x"
-                android:text="@string/see_more"
-                android:textColor="@color/primary"
-                android:textSize="@dimen/text_regular_2x" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_promotions"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/lbl_promotions"
-                android:layout_marginTop="@dimen/margin_medium_2" />
-
-            <TextView
-                android:id="@+id/lbl_burpple_guides_latest"
-                style="@style/CategoryText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/rv_promotions"
-                android:layout_marginBottom="@dimen/margin_medium_2_n"
-                android:layout_marginLeft="@dimen/margin_medium_2"
-                android:layout_marginTop="@dimen/margin_xlarge"
-                android:text="@string/latest" />
-
-            <TextView
-                android:id="@+id/lbl_burpple_guides"
-                style="@style/CategoryTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_below="@id/lbl_burpple_guides_latest"
-                android:layout_marginLeft="@dimen/margin_medium_2"
-                android:text="@string/burpple_guides" />
-
-            <TextView
-                android:id="@+id/btn_see_more_burpple_guides"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/lbl_burpple_guides"
-                android:layout_alignParentRight="true"
-                android:padding="@dimen/text_regular_2x"
-                android:text="@string/see_more"
-                android:textColor="@color/primary"
-                android:textSize="@dimen/text_regular_2x" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_burpple_guides"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/lbl_burpple_guides"
-                android:layout_marginTop="@dimen/margin_medium_2" />
-
-            <TextView
-                android:id="@+id/lbl_new_trending_latest"
-                style="@style/CategoryText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/rv_burpple_guides"
-                android:layout_marginBottom="@dimen/margin_medium_2_n"
-                android:layout_marginLeft="@dimen/margin_medium_2"
-                android:layout_marginTop="@dimen/margin_xlarge"
-                android:text="@string/latest" />
-
-            <TextView
-                android:id="@+id/lbl_new_trending"
-                style="@style/CategoryTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_below="@id/lbl_new_trending_latest"
-                android:layout_marginLeft="@dimen/margin_medium_2"
-                android:text="@string/new_trending" />
-
-            <LinearLayout
-                android:id="@+id/ll_new_and_trending"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/lbl_new_trending"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <include
-                    android:id="@+id/vp_empty_news"
-                    layout="@layout/view_pod_new_trending"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <include
-                    android:id="@+id/vp_empty_news"
-                    layout="@layout/view_pod_new_trending"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/iv_divider_1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/ll_new_and_trending"
-                android:src="@drawable/divider_margin_horizontal_line" />
-
-            <TextView
-                android:id="@+id/btn_explore_neighbourhoods"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/iv_divider_1"
-                android:layout_marginBottom="@dimen/margin_medium_2"
-                android:layout_marginLeft="@dimen/margin_medium_2"
-                android:layout_marginTop="@dimen/margin_medium_2"
-                android:drawableLeft="@drawable/ic_location_on_24dp"
-                android:drawablePadding="@dimen/margin_medium_2"
-                android:drawableTint="@color/secondary_text"
-                android:text="@string/explore_neighbourhoods"
-                android:textColor="@color/secondary_text"
-                android:textSize="@dimen/text_regular_3x" />
-
-            <ImageView
-                android:id="@+id/iv_divider_2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/btn_explore_neighbourhoods"
-                android:src="@drawable/divider_margin_horizontal_line" />
-
-            <TextView
-                android:id="@+id/btn_explore_categories"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/iv_divider_2"
-                android:layout_marginBottom="@dimen/margin_medium_2"
-                android:layout_marginLeft="@dimen/margin_medium_2"
-                android:layout_marginTop="@dimen/margin_medium_2"
-                android:drawableLeft="@drawable/ic_restaurant_24dp"
-                android:drawablePadding="@dimen/margin_medium_2"
-                android:drawableTint="@color/secondary_text"
-                android:text="@string/explore_categories"
-                android:textColor="@color/secondary_text"
-                android:textSize="@dimen/text_regular_3x" />
-
-            <ImageView
-                android:id="@+id/iv_divider_3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/btn_explore_categories"
-                android:layout_marginBottom="@dimen/margin_xxlarge"
-                android:src="@drawable/divider_margin_horizontal_line" />
-
-        </RelativeLayout>
-
-    </android.support.v4.widget.NestedScrollView>
+    </RelativeLayout>
 
     <!--
     <android.support.design.widget.FloatingActionButton

@@ -10,10 +10,16 @@
     <string name="shop_name_1">Sushi Kimura</string>
     <string name="shop_name_2">Nesuto</string>
     <string name="shop_name_3">Misato</string>
-    <string name="explore">EXPLORE</string>
+    <string name="explore">Explore</string>
     <string name="explore_neighbourhoods">Explore Neighbourhoods</string>
     <string name="explore_categories">Explore_Categories</string>
     <string name="burpple">burpple</string>
     <string name="search_hint">Search e.g. Japanese in Orchard</string>
     <string name="see_more">See More</string>
+    <string name="all_guides">All Guides</string>
+    <string name="shop_name"><![CDATA[Wildfire Chicken & Burgers]]></string>
+    <string name="shop_area">Hleden</string>
+    <string name="promotion_duration">Till 31st Jan \'18</string>
+    <string name="promotion_title">1-for-1 Shabu Burger</string>
+    <string name="burpple_exclusive">BURPPLE EXCLUSIVE</string>
 </resources>

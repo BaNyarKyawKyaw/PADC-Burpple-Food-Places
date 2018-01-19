@@ -87,7 +87,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_shop_name_3"
-        android:src="@drawable/divider_margin_horizontal_line" />
+        android:src="@drawable/divider_horizontal_line" />
 
     <TextView
         android:id="@+id/lbl_explore"
@@ -98,6 +98,7 @@
         android:layout_marginBottom="@dimen/margin_medium"
         android:layout_marginTop="@dimen/margin_medium"
         android:text="@string/explore"
-        android:textSize="@dimen/text_regular_2x"/>
+        android:textAllCaps="true"
+        android:textSize="@dimen/text_regular_2x" />
 
 </com.bnkk.padcburpplefoodplaces.components.NewAndTrendingView>
