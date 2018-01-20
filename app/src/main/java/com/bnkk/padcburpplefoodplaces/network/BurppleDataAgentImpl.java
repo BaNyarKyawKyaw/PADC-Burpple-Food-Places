@@ -1,5 +1,6 @@
 package com.bnkk.padcburpplefoodplaces.network;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.bnkk.padcburpplefoodplaces.BfpApp;
@@ -25,10 +26,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class BurppleDataAgentImpl implements BurppleDataAgent {
 
-    private static BurppleDataAgentImpl sObjectInstance;
     private BurppleAPI burppleAPI;
 
-    private BurppleDataAgentImpl() {
+    public BurppleDataAgentImpl() {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(15, TimeUnit.SECONDS)
                 .writeTimeout(15, TimeUnit.SECONDS)
@@ -44,15 +44,8 @@ public class BurppleDataAgentImpl implements BurppleDataAgent {
         burppleAPI = retrofit.create(BurppleAPI.class);
     }
 
-    public static BurppleDataAgentImpl getObjectInstance() {
-        if (sObjectInstance == null) {
-            sObjectInstance = new BurppleDataAgentImpl();
-        }
-        return sObjectInstance;
-    }
-
     @Override
-    public void loadFeatured(String accessToken, int pageNo) {
+    public void loadFeatured(String accessToken, int pageNo, final Context context) {
         Call<GetFeaturedResponse> loadFeaturedCall = burppleAPI.loadFeatured(accessToken, pageNo);
         loadFeaturedCall.enqueue(new BurppleCallBack<GetFeaturedResponse>() {
             @Override
@@ -62,7 +55,7 @@ public class BurppleDataAgentImpl implements BurppleDataAgent {
                 if (getFeaturedResponse != null
                         && getFeaturedResponse.getFeaturedList().size() > 0) {
                     RestApiEvent.FeaturedLoadedEvent featuredLoadedEvent = new RestApiEvent.FeaturedLoadedEvent(
-                            getFeaturedResponse.getPage(), getFeaturedResponse.getFeaturedList());
+                            getFeaturedResponse.getPage(), getFeaturedResponse.getFeaturedList(), context);
                     EventBus.getDefault().post(featuredLoadedEvent);
                 }
             }
@@ -70,7 +63,7 @@ public class BurppleDataAgentImpl implements BurppleDataAgent {
     }
 
     @Override
-    public void loadPromotions(String accessToken, int pageNo) {
+    public void loadPromotions(String accessToken, int pageNo, final Context context) {
         Call<GetPromotionsResponse> loadPromotionsCall = burppleAPI.loadPromotions(accessToken, pageNo);
         loadPromotionsCall.enqueue(new BurppleCallBack<GetPromotionsResponse>() {
             @Override
@@ -80,7 +73,7 @@ public class BurppleDataAgentImpl implements BurppleDataAgent {
                 if (getPromotionsResponse != null
                         && getPromotionsResponse.getPromotionsList().size() > 0) {
                     RestApiEvent.PromotionsLoadedEvent promotionsLoadedEvent = new RestApiEvent.PromotionsLoadedEvent(
-                            getPromotionsResponse.getPage(), getPromotionsResponse.getPromotionsList());
+                            getPromotionsResponse.getPage(), getPromotionsResponse.getPromotionsList(), context);
                     EventBus.getDefault().post(promotionsLoadedEvent);
                 }
             }
@@ -88,7 +81,7 @@ public class BurppleDataAgentImpl implements BurppleDataAgent {
     }
 
     @Override
-    public void loadGuides(String accessToken, int pageNo) {
+    public void loadGuides(String accessToken, int pageNo, final Context context) {
         Call<GetGuidesResponse> loadGuidesCall = burppleAPI.loadGuides(accessToken, pageNo);
         loadGuidesCall.enqueue(new BurppleCallBack<GetGuidesResponse>() {
             @Override
@@ -98,7 +91,7 @@ public class BurppleDataAgentImpl implements BurppleDataAgent {
                 if (getGuidesResponse != null
                         && getGuidesResponse.getGuidesList().size() > 0) {
                     RestApiEvent.GuidesLoadedEvent guidesLoadedEvent = new RestApiEvent.GuidesLoadedEvent(
-                            getGuidesResponse.getPage(), getGuidesResponse.getGuidesList());
+                            getGuidesResponse.getPage(), getGuidesResponse.getGuidesList(), context);
                     EventBus.getDefault().post(guidesLoadedEvent);
                 }
             }

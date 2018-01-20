@@ -1,10 +1,16 @@
 package com.bnkk.padcburpplefoodplaces.activities;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
+import com.bnkk.padcburpplefoodplaces.BfpApp;
 import com.bnkk.padcburpplefoodplaces.R;
 import com.bnkk.padcburpplefoodplaces.adapters.BurppleGuidesAdapter;
 import com.bnkk.padcburpplefoodplaces.adapters.FeaturedImagesPagerAdapter;
@@ -13,20 +19,33 @@ import com.bnkk.padcburpplefoodplaces.components.PageIndicatorView;
 import com.bnkk.padcburpplefoodplaces.components.SmartScrollListener;
 import com.bnkk.padcburpplefoodplaces.data.models.BurppleModel;
 import com.bnkk.padcburpplefoodplaces.data.vos.FeaturedVO;
+import com.bnkk.padcburpplefoodplaces.data.vos.GuidesVO;
+import com.bnkk.padcburpplefoodplaces.data.vos.PromotionsVO;
 import com.bnkk.padcburpplefoodplaces.events.RestApiEvent;
+import com.bnkk.padcburpplefoodplaces.mvp.presenters.MainPresenter;
+import com.bnkk.padcburpplefoodplaces.mvp.views.MainView;
+import com.bnkk.padcburpplefoodplaces.persistence.BurppleContract;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity
+        implements LoaderManager.LoaderCallbacks<Cursor>, MainView {
+
+    private static final int PROMOTION_LOADER = 1000;
+    private static final int FEATURED_LOADER = 2000;
+    private static final int GUIDES_LOADER = 3000;
 
     @BindView(R.id.vp_high_light_images)
     ViewPager vpHighLightImages;
@@ -42,13 +61,21 @@ public class MainActivity extends BaseActivity {
 
     private FeaturedImagesPagerAdapter mFeaturedImagesPagerAdapter;
     private PromotionsAdapter mPromotionsAdapter;
-    private BurppleGuidesAdapter mBurppleGuidesAdapter;
+    private BurppleGuidesAdapter mGuidesAdapter;
+
+    @Inject
+    MainPresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this, this);
+
+        BfpApp bfpApp = (BfpApp) getApplicationContext();
+        bfpApp.getAppComponent().inject(this);
+
+        mPresenter.onCreate(this);
 
         mFeaturedImagesPagerAdapter = new FeaturedImagesPagerAdapter(getApplicationContext());
         vpHighLightImages.setAdapter(mFeaturedImagesPagerAdapter);
@@ -101,24 +128,30 @@ public class MainActivity extends BaseActivity {
                 new SmartScrollListener.OnSmartScrollListener() {
                     @Override
                     public void onListEndReach() {
-                        BurppleModel.getObjInstance().loadMorePromotions();
+                        BurppleModel burppleModel = new BurppleModel(getApplicationContext());
+                        burppleModel.loadMorePromotions(getApplicationContext());
+                        //mPresenter.onPromotionListEndReach(getApplicationContext());
                     }
                 });
         rvPromotions.addOnScrollListener(mPromotionsSmartScrollListener);
 
         rvBurppleGuides.setLayoutManager(new LinearLayoutManager(getApplicationContext(),
                 LinearLayoutManager.HORIZONTAL, false));
-        mBurppleGuidesAdapter = new BurppleGuidesAdapter(getApplicationContext());
-        rvBurppleGuides.setAdapter(mBurppleGuidesAdapter);
+        mGuidesAdapter = new BurppleGuidesAdapter(getApplicationContext());
+        rvBurppleGuides.setAdapter(mGuidesAdapter);
 
         SmartScrollListener mGuidesSmartScrollListener = new SmartScrollListener(
                 new SmartScrollListener.OnSmartScrollListener() {
                     @Override
                     public void onListEndReach() {
-                        BurppleModel.getObjInstance().loadMoreGuides();
+                        mPresenter.onGuidesListEndReach(getApplicationContext());
                     }
                 });
         rvBurppleGuides.addOnScrollListener(mGuidesSmartScrollListener);
+
+        getSupportLoaderManager().initLoader(PROMOTION_LOADER, null, this);
+        getSupportLoaderManager().initLoader(FEATURED_LOADER, null, this);
+        getSupportLoaderManager().initLoader(GUIDES_LOADER, null, this);
 
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -135,35 +168,104 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        mPresenter.onStart();
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        mPresenter.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.onResume();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
+        mPresenter.onStop();
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
-    public void onFeaturedLoaded(RestApiEvent.FeaturedLoadedEvent event) {
-        bindData(event.getLoadFeatured());
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestroy();
     }
 
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
-    public void onPromotionsLoaded(RestApiEvent.PromotionsLoadedEvent event) {
-        mPromotionsAdapter.appendNewData(event.getLoadPromotions());
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onErrorInvokingAPI(RestApiEvent.ErrorInvokingAPIEvent event) {
+        Snackbar.make(rvPromotions, event.getErrorMsg(), Snackbar.LENGTH_INDEFINITE).show();
+        Snackbar.make(rvBurppleGuides, event.getErrorMsg(), Snackbar.LENGTH_INDEFINITE).show();
     }
 
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
-    public void onGuidesLoaded(RestApiEvent.GuidesLoadedEvent event) {
-        mBurppleGuidesAdapter.appendNewData(event.getLoadGuides());
+    @Override
+    public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        if (id == PROMOTION_LOADER) {
+            return new android.support.v4.content.CursorLoader(getApplicationContext(),
+                    BurppleContract.PromotionsEntry.CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    null);
+        }
+
+        if (id == GUIDES_LOADER) {
+            return new android.support.v4.content.CursorLoader(getApplicationContext(),
+                    BurppleContract.GuidesEntry.CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    null);
+        }
+
+        if (id == FEATURED_LOADER) {
+            return new android.support.v4.content.CursorLoader(getApplicationContext(),
+                    BurppleContract.FeatruredEntry.CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    null);
+        }
+        return null;
     }
 
-    public void bindData(List<FeaturedVO> data) {
-        mFeaturedImagesPagerAdapter.setFeatured(data);
+    @Override
+    public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
+        mPresenter.onDataLoaded(getApplicationContext(), data, loader);
+    }
+
+    @Override
+    public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
+
+    }
+
+    @Override
+    public void displayFeatured(List<FeaturedVO> featuredList) {
+        mFeaturedImagesPagerAdapter.setFeatured(featuredList);
+    }
+
+    @Override
+    public void displayPromotion(List<PromotionsVO> promotionsList) {
+        mPromotionsAdapter.appendNewData(promotionsList);
+    }
+
+    @Override
+    public void displayGuides(List<GuidesVO> guidesList) {
+        mGuidesAdapter.appendNewData(guidesList);
+    }
+
+    @Override
+    public Context getContext() {
+        return getApplicationContext();
     }
 }

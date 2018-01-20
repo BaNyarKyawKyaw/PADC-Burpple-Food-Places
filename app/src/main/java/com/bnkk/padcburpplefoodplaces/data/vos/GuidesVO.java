@@ -1,5 +1,9 @@
 package com.bnkk.padcburpplefoodplaces.data.vos;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+
+import com.bnkk.padcburpplefoodplaces.persistence.BurppleContract;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -34,5 +38,27 @@ public class GuidesVO {
 
     public String getBurppleGuideDesc() {
         return burppleGuideDesc;
+    }
+
+    public ContentValues parseToContentValues() {
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(BurppleContract.GuidesEntry.COLUMN_GUIDE_ID, burppleGuideId);
+        contentValues.put(BurppleContract.GuidesEntry.COLUMN_GUIDE_IMAGE, burppleGuideImage);
+        contentValues.put(BurppleContract.GuidesEntry.COLUMN_GUIDE_TITLE, burppleGuideTitle);
+        contentValues.put(BurppleContract.GuidesEntry.COLUMN_GUIDE_DESC, burppleGuideDesc);
+
+        return contentValues;
+    }
+
+    public static GuidesVO parseFromCursor(Cursor cursor) {
+        GuidesVO guides = new GuidesVO();
+
+        guides.burppleGuideId = cursor.getString(cursor.getColumnIndex(BurppleContract.GuidesEntry.COLUMN_GUIDE_ID));
+        guides.burppleGuideImage = cursor.getString(cursor.getColumnIndex(BurppleContract.GuidesEntry.COLUMN_GUIDE_IMAGE));
+        guides.burppleGuideTitle = cursor.getString(cursor.getColumnIndex(BurppleContract.GuidesEntry.COLUMN_GUIDE_TITLE));
+        guides.burppleGuideDesc = cursor.getString(cursor.getColumnIndex(BurppleContract.GuidesEntry.COLUMN_GUIDE_DESC));
+
+        return guides;
     }
 }
