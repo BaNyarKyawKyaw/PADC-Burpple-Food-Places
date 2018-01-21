@@ -9,6 +9,7 @@ import com.bnkk.padcburpplefoodplaces.data.vos.FeaturedVO;
 import com.bnkk.padcburpplefoodplaces.data.vos.GuidesVO;
 import com.bnkk.padcburpplefoodplaces.data.vos.PromotionsVO;
 import com.bnkk.padcburpplefoodplaces.mvp.views.MainView;
+import com.bnkk.padcburpplefoodplaces.utils.AppConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +24,6 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     @Inject
     BurppleModel mModel;
-
-    private static final int PROMOTION_LOADER = 1000;
-    private static final int FEATURED_LOADER = 2000;
-    private static final int GUIDES_LOADER = 3000;
 
     @Override
     public void onCreate(MainView view) {
@@ -54,7 +51,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void onDataLoaded(Context context, Cursor data, android.support.v4.content.Loader<Cursor> loader) {
 
-        if (loader.getId() == PROMOTION_LOADER) {
+        if (loader.getId() == AppConstants.PROMOTION_LOADER) {
             if (data != null && data.moveToFirst()) {
 
                 List<PromotionsVO> promotionsList = new ArrayList<>();
@@ -69,7 +66,7 @@ public class MainPresenter extends BasePresenter<MainView> {
             }
         }
 
-        if (loader.getId() == GUIDES_LOADER) {
+        if (loader.getId() == AppConstants.GUIDES_LOADER) {
             if (data != null && data.moveToFirst()) {
 
                 List<GuidesVO> guidesList = new ArrayList<>();
@@ -84,7 +81,7 @@ public class MainPresenter extends BasePresenter<MainView> {
             }
         }
 
-        if (loader.getId() == FEATURED_LOADER) {
+        if (loader.getId() == AppConstants.FEATURED_LOADER) {
             if (data != null && data.moveToFirst()) {
 
                 List<FeaturedVO> featuredList = new ArrayList<>();

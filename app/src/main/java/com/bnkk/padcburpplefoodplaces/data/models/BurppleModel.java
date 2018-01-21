@@ -11,9 +11,9 @@ import com.bnkk.padcburpplefoodplaces.data.vos.PromotionsVO;
 import com.bnkk.padcburpplefoodplaces.data.vos.ShopVO;
 import com.bnkk.padcburpplefoodplaces.events.RestApiEvent;
 import com.bnkk.padcburpplefoodplaces.network.BurppleDataAgent;
-import com.bnkk.padcburpplefoodplaces.network.BurppleDataAgentImpl;
 import com.bnkk.padcburpplefoodplaces.persistence.BurppleContract;
 import com.bnkk.padcburpplefoodplaces.utils.AppConstants;
+import com.bnkk.padcburpplefoodplaces.utils.ConfigUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -33,13 +33,8 @@ public class BurppleModel {
     @Inject
     BurppleDataAgent mDataAgent;
 
-    private List<FeaturedVO> mFeatured;
-    private List<PromotionsVO> mPromotions;
-    private List<GuidesVO> mGuides;
-
-    private int mFeaturedPageIndex = 1;
-    private int mPromotionsPageIndex = 1;
-    private int mGuidesPageIndex = 1;
+    @Inject
+    ConfigUtils mConfigUtils;
 
     public BurppleModel(Context context) {
         EventBus.getDefault().register(this);
@@ -50,56 +45,44 @@ public class BurppleModel {
 
     public void startLoadingFeatured(Context context) {
         mDataAgent.loadFeatured(AppConstants.ACCESS_TOKEN,
-                mFeaturedPageIndex,
+                mConfigUtils.loadFeaturedPageIndex(),
                 context);
     }
 
     public void loadMoreFeatured(Context context) {
         mDataAgent.loadFeatured(AppConstants.ACCESS_TOKEN,
-                mFeaturedPageIndex + 1,
+                mConfigUtils.loadFeaturedPageIndex() + 1,
                 context);
-    }
-
-    public List<FeaturedVO> getFeatured() {
-        return mFeatured;
     }
 
     public void startLoadingPromotions(Context context) {
         mDataAgent.loadPromotions(AppConstants.ACCESS_TOKEN,
-                mPromotionsPageIndex,
+                mConfigUtils.loadPromotionPageIndex(),
                 context);
     }
 
     public void loadMorePromotions(Context context) {
         mDataAgent.loadPromotions(AppConstants.ACCESS_TOKEN,
-                mPromotionsPageIndex + 1,
+                mConfigUtils.loadPromotionPageIndex() + 1,
                 context);
-    }
-
-    public List<PromotionsVO> getPromotions() {
-        return mPromotions;
     }
 
     public void startLoadingGuides(Context context) {
         mDataAgent.loadGuides(AppConstants.ACCESS_TOKEN,
-                mGuidesPageIndex,
+                mConfigUtils.loadGuidesPageIndex(),
                 context);
     }
 
     public void loadMoreGuides(Context context) {
         mDataAgent.loadGuides(AppConstants.ACCESS_TOKEN,
-                mGuidesPageIndex + 1,
+                mConfigUtils.loadGuidesPageIndex(),
                 context);
-    }
-
-    public List<GuidesVO> getGuides() {
-        return mGuides;
     }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onFeaturedLoaded(RestApiEvent.FeaturedLoadedEvent event) {
-        //mFeatured.addAll(event.getLoadFeatured());
-        mFeaturedPageIndex = event.getLoadedPageIndex() + 1;
+
+        mConfigUtils.saveFeaturedPageIndex(event.getLoadedPageIndex() + 1);
 
         //Logic for saving data in Persistence Layer
         ContentValues[] featuredCVs = new ContentValues[event.getLoadFeatured().size()];
@@ -116,8 +99,8 @@ public class BurppleModel {
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onPromotionsLoaded(RestApiEvent.PromotionsLoadedEvent event) {
-        //mPromotions.addAll(event.getLoadPromotions());
-        mPromotionsPageIndex = event.getLoadedPageIndex() + 1;
+
+        mConfigUtils.savePromotionPageIndex(event.getLoadedPageIndex() + 1);
 
         //Logic for saving data in Persistence Layer
         ContentValues[] promotionsCVs = new ContentValues[event.getLoadPromotions().size()];
@@ -154,8 +137,8 @@ public class BurppleModel {
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onGuidesLoaded(RestApiEvent.GuidesLoadedEvent event) {
-        //mGuides.addAll(event.getLoadGuides());
-        mGuidesPageIndex = event.getLoadedPageIndex() + 1;
+
+        mConfigUtils.saveGuidesPageIndex(event.getLoadedPageIndex() + 1);
 
         //Logic for saving data in Persistence Layer
         ContentValues[] guidesCVs = new ContentValues[event.getLoadGuides().size()];

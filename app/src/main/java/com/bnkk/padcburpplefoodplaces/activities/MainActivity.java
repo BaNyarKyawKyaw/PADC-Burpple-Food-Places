@@ -8,7 +8,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.bnkk.padcburpplefoodplaces.BfpApp;
 import com.bnkk.padcburpplefoodplaces.R;
@@ -25,12 +24,12 @@ import com.bnkk.padcburpplefoodplaces.events.RestApiEvent;
 import com.bnkk.padcburpplefoodplaces.mvp.presenters.MainPresenter;
 import com.bnkk.padcburpplefoodplaces.mvp.views.MainView;
 import com.bnkk.padcburpplefoodplaces.persistence.BurppleContract;
+import com.bnkk.padcburpplefoodplaces.utils.AppConstants;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -42,10 +41,6 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity
         implements LoaderManager.LoaderCallbacks<Cursor>, MainView {
-
-    private static final int PROMOTION_LOADER = 1000;
-    private static final int FEATURED_LOADER = 2000;
-    private static final int GUIDES_LOADER = 3000;
 
     @BindView(R.id.vp_high_light_images)
     ViewPager vpHighLightImages;
@@ -149,20 +144,9 @@ public class MainActivity extends BaseActivity
                 });
         rvBurppleGuides.addOnScrollListener(mGuidesSmartScrollListener);
 
-        getSupportLoaderManager().initLoader(PROMOTION_LOADER, null, this);
-        getSupportLoaderManager().initLoader(FEATURED_LOADER, null, this);
-        getSupportLoaderManager().initLoader(GUIDES_LOADER, null, this);
-
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
+        getSupportLoaderManager().initLoader(AppConstants.PROMOTION_LOADER, null, this);
+        getSupportLoaderManager().initLoader(AppConstants.FEATURED_LOADER, null, this);
+        getSupportLoaderManager().initLoader(AppConstants.GUIDES_LOADER, null, this);
     }
 
     @Override
@@ -210,7 +194,7 @@ public class MainActivity extends BaseActivity
     @Override
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        if (id == PROMOTION_LOADER) {
+        if (id == AppConstants.PROMOTION_LOADER) {
             return new android.support.v4.content.CursorLoader(getApplicationContext(),
                     BurppleContract.PromotionsEntry.CONTENT_URI,
                     null,
@@ -219,7 +203,7 @@ public class MainActivity extends BaseActivity
                     null);
         }
 
-        if (id == GUIDES_LOADER) {
+        if (id == AppConstants.GUIDES_LOADER) {
             return new android.support.v4.content.CursorLoader(getApplicationContext(),
                     BurppleContract.GuidesEntry.CONTENT_URI,
                     null,
@@ -228,7 +212,7 @@ public class MainActivity extends BaseActivity
                     null);
         }
 
-        if (id == FEATURED_LOADER) {
+        if (id == AppConstants.FEATURED_LOADER) {
             return new android.support.v4.content.CursorLoader(getApplicationContext(),
                     BurppleContract.FeatruredEntry.CONTENT_URI,
                     null,

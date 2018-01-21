@@ -16,7 +16,12 @@ public abstract class BurppleCallBack<T extends BurppleResponse> implements Call
 
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
-
+        BurppleResponse burppleResponse = response.body();
+        if (burppleResponse == null) {
+            RestApiEvent.ErrorInvokingAPIEvent errorEvent
+                    = new RestApiEvent.ErrorInvokingAPIEvent("No data could be loaded for now. Pls try again later.");
+            EventBus.getDefault().post(errorEvent);
+        }
     }
 
     @Override

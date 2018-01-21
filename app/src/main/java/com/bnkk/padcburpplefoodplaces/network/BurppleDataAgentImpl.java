@@ -1,9 +1,7 @@
 package com.bnkk.padcburpplefoodplaces.network;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.bnkk.padcburpplefoodplaces.BfpApp;
 import com.bnkk.padcburpplefoodplaces.events.RestApiEvent;
 import com.bnkk.padcburpplefoodplaces.network.responses.GetFeaturedResponse;
 import com.bnkk.padcburpplefoodplaces.network.responses.GetGuidesResponse;
