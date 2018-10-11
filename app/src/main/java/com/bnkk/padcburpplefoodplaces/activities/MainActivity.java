@@ -9,7 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.bnkk.padcburpplefoodplaces.BfpApp;
+import com.bnkk.padcburpplefoodplaces.BurppleApp;
 import com.bnkk.padcburpplefoodplaces.R;
 import com.bnkk.padcburpplefoodplaces.adapters.BurppleGuidesAdapter;
 import com.bnkk.padcburpplefoodplaces.adapters.FeaturedImagesPagerAdapter;
@@ -67,8 +67,8 @@ public class MainActivity extends BaseActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this, this);
 
-        BfpApp bfpApp = (BfpApp) getApplicationContext();
-        bfpApp.getAppComponent().inject(this);
+        BurppleApp burppleApp = (BurppleApp) getApplicationContext();
+        burppleApp.getAppComponent().inject(this);
 
         mPresenter.onCreate(this);
 

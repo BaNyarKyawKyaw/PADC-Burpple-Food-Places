@@ -11,16 +11,15 @@ import com.bnkk.padcburpplefoodplaces.dagger.NetworkModule;
  * Created by E5-575G on 1/5/2018.
  */
 
-public class BfpApp extends Application {
+public class BurppleApp extends Application {
 
-    public static final String LOG_TAG = "BfpApp";
+    public static final String LOG_TAG = "BurppleApp";
 
     private AppComponent mAppComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
         mAppComponent = initDagger();
     }
 
