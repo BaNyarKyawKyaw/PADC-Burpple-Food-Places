@@ -3,7 +3,7 @@ package com.bnkk.padcburpplefoodplaces.mvp.presenters;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.bnkk.padcburpplefoodplaces.BfpApp;
+import com.bnkk.padcburpplefoodplaces.BurppleApp;
 import com.bnkk.padcburpplefoodplaces.data.models.BurppleModel;
 import com.bnkk.padcburpplefoodplaces.data.vos.FeaturedVO;
 import com.bnkk.padcburpplefoodplaces.data.vos.GuidesVO;
@@ -28,7 +28,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     @Override
     public void onCreate(MainView view) {
         super.onCreate(view);
-        BfpApp bfpApp = (BfpApp) mView.getContext();
+        BurppleApp burppleApp = (BurppleApp) mView.getContext();
     }
 
     @Override

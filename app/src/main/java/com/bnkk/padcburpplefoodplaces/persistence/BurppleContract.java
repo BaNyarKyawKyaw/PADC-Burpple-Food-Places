@@ -5,7 +5,7 @@ import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.bnkk.padcburpplefoodplaces.BfpApp;
+import com.bnkk.padcburpplefoodplaces.BurppleApp;
 
 /**
  * Created by E5-575G on 1/19/2018.
@@ -13,7 +13,7 @@ import com.bnkk.padcburpplefoodplaces.BfpApp;
 
 public class BurppleContract {
 
-    public static final String CONTENT_AUTHORITY = BfpApp.class.getPackage().getName();
+    public static final String CONTENT_AUTHORITY = BurppleApp.class.getPackage().getName();
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     public static final String PATH_FEATURED = "featured";

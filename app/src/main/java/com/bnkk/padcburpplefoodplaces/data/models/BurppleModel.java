@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
 
-import com.bnkk.padcburpplefoodplaces.BfpApp;
+import com.bnkk.padcburpplefoodplaces.BurppleApp;
 import com.bnkk.padcburpplefoodplaces.data.vos.FeaturedVO;
 import com.bnkk.padcburpplefoodplaces.data.vos.GuidesVO;
 import com.bnkk.padcburpplefoodplaces.data.vos.PromotionsVO;
@@ -39,8 +39,8 @@ public class BurppleModel {
     public BurppleModel(Context context) {
         EventBus.getDefault().register(this);
 
-        BfpApp bfpApp = (BfpApp) context.getApplicationContext();
-        bfpApp.getAppComponent().inject(this);
+        BurppleApp burppleApp = (BurppleApp) context.getApplicationContext();
+        burppleApp.getAppComponent().inject(this);
     }
 
     public void startLoadingFeatured(Context context) {
@@ -94,7 +94,7 @@ public class BurppleModel {
 
         int insertedFeatured = event.getContext().getContentResolver().bulkInsert(BurppleContract.FeatruredEntry.CONTENT_URI,
                 featuredCVs);
-        Log.d(BfpApp.LOG_TAG, "insertedFeatured : " + insertedFeatured);
+        Log.d(BurppleApp.LOG_TAG, "insertedFeatured : " + insertedFeatured);
     }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
@@ -124,15 +124,15 @@ public class BurppleModel {
 
         int insertedShops = event.getContext().getContentResolver().bulkInsert(BurppleContract.ShopEntry.CONTENT_URI,
                 shopCVList.toArray(new ContentValues[0]));
-        Log.d(BfpApp.LOG_TAG, "insertedShops : " + insertedShops);
+        Log.d(BurppleApp.LOG_TAG, "insertedShops : " + insertedShops);
 
         int insertedPromotionTerms = event.getContext().getContentResolver().bulkInsert(BurppleContract.PromotionTermsEntry.CONTENT_URI,
                 promotionTermsCVList.toArray(new ContentValues[0]));
-        Log.d(BfpApp.LOG_TAG, "insertedPromotionTerms : " + insertedPromotionTerms);
+        Log.d(BurppleApp.LOG_TAG, "insertedPromotionTerms : " + insertedPromotionTerms);
 
         int insertedPromotions = event.getContext().getContentResolver().bulkInsert(BurppleContract.PromotionsEntry.CONTENT_URI,
                 promotionsCVs);
-        Log.d(BfpApp.LOG_TAG, "insertedPromotions : " + insertedPromotions);
+        Log.d(BurppleApp.LOG_TAG, "insertedPromotions : " + insertedPromotions);
     }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
@@ -150,6 +150,6 @@ public class BurppleModel {
 
         int insertedGuides = event.getContext().getContentResolver().bulkInsert(BurppleContract.GuidesEntry.CONTENT_URI,
                 guidesCVs);
-        Log.d(BfpApp.LOG_TAG, "insertedGuides : " + insertedGuides);
+        Log.d(BurppleApp.LOG_TAG, "insertedGuides : " + insertedGuides);
     }
 }

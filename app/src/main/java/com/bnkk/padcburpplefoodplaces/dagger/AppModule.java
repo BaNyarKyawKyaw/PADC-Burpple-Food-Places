@@ -2,7 +2,7 @@ package com.bnkk.padcburpplefoodplaces.dagger;
 
 import android.content.Context;
 
-import com.bnkk.padcburpplefoodplaces.BfpApp;
+import com.bnkk.padcburpplefoodplaces.BurppleApp;
 import com.bnkk.padcburpplefoodplaces.data.models.BurppleModel;
 import com.bnkk.padcburpplefoodplaces.mvp.presenters.MainPresenter;
 
@@ -18,9 +18,9 @@ import dagger.Provides;
 @Module
 public class AppModule {
 
-    private BfpApp mApp;
+    private BurppleApp mApp;
 
-    public AppModule(BfpApp application) {
+    public AppModule(BurppleApp application) {
         mApp = application;
     }
 
